@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  db-miniapp:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: teaapp 
+      POSTGRES_PASSWORD: password 
+      POSTGRES_DB: test       
+    networks:
+      - my_network             
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db_data:/var/lib/postgresql/data   
+  
+  minio-miniapp:
+    image: minio/minio
+    container_name: minioMiniApp
+    environment:
+      MINIO_ACCESS_KEY: Q3AM3UQ867SPQQA43P2A
+      MINIO_SECRET_KEY: zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TA
+    networks:
+      - my_network
+    ports:
+      - "9002:9002" 
+    volumes:
+      - minio_data:/data
+    command: server /data 
+
+volumes:
+  minio_data:                  
+networks:
+  my_network:  

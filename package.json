@@ -1,0 +1,32 @@
+{
+  "name": "tea_shop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmitriyFadeev/tea_shop.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmitriyFadeev/tea_shop/issues"
+  },
+  "homepage": "https://github.com/dmitriyFadeev/tea_shop#readme",
+  "dependencies": {
+    "@t3-oss/env-core": "^0.11.1",
+    "@trpc/server": "^10.45.2",
+    "drizzle-kit": "^0.30.1",
+    "drizzle-orm": "^0.38.3",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "@types/pg": "^8.11.10"
+  }
+}
