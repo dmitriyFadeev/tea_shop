@@ -1,4 +1,4 @@
-import { bigint, bigserial, jsonb, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { bigint, bigserial, jsonb, pgTable, text } from "drizzle-orm/pg-core";
 import { pgGoods } from "../schema";
 
 export const pgGoodsSchema = pgTable('goods', {

@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server';
-import { and, eq, gte, inArray, lte, or } from 'drizzle-orm';
+import { eq, ilike } from 'drizzle-orm';
 import { pgGoods } from '../drizzle/schema';
 import db from '../../db';
 import type {
@@ -16,7 +16,7 @@ export class GoodRepository {
       .insert(pgGoods)
       .values(good)
       .returning();
-    const createdGood = result[0];
+    const createdGood = result[0] as TGood;
 
     return createdGood;
   }
@@ -26,7 +26,7 @@ export class GoodRepository {
       .select()
       .from(pgGoods)
       .where(eq(pgGoods.goodId, id));
-    const good:TGood = result[0];
+    const good = result[0] as TGood;
     if (!good || !good.goodId) {
       throw new TRPCError({
         code: 'NOT_FOUND',
@@ -37,20 +37,13 @@ export class GoodRepository {
   }
 
   static async getGoods(filters:TFiltersGood): Promise<TFiltersGoodResponse> {
-    const allGoodsDb = await db.select().from(pgGoods);
-    const filtersobj = and(
-      filters.dateFrom? gte(pgGoods.date, filters.dateFrom): undefined,
-      filters.dateTo? lte(pgGoods.date, filters.dateTo): undefined,
-      filters.freeSpaces? gte(pgGoods.freeSpaces, 1): undefined,
-      filters.onWater? eq(pgGoods.onWater, true): undefined,
-      filters.location? eq(pgGoods.location, filters.location): undefined,
-      filters.interests.length > 0 ?
-        inArray(pgGoods.interest, filters.interests): undefined
-    )
-    const filtered: TGood[] = await db.select().from(pgGoods).where(filtersobj)
-    const allGoods: TGood[] = allGoodsDb;
+    const allGoodsDb = await db.select().from(pgGoods) as TGood[];
+    const filtersobj =
+      filters.name? ilike(pgGoods.name, `%${filters.name}%`) : undefined
+
+    const filtered = await db.select().from(pgGoods).where(filtersobj) as TGood[]
     return {
-      allGoods, 
+      allGoods: allGoodsDb, 
       filtered
     }
   }
@@ -61,7 +54,7 @@ export class GoodRepository {
       .set(updatedGood)
       .where(eq(pgGoods.goodId, updatedGood.goodId))
       .returning();
-    const good:TGood = result[0];
+    const good = result[0] as TGood;
     if (!good || !good.goodId) {
       throw new TRPCError({
         code: 'NOT_FOUND',
